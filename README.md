@@ -4,7 +4,7 @@
 
 -> Install/create a manifest for a published container
 
--> Proxy & View Endpoints
+-> Port forward & View Endpoints
 
 -> Node port-forward the port
 
