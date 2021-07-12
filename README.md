@@ -8,6 +8,8 @@
 
 -> Port forward & View Endpoints
 
+-> View debug/output in K8 dash
+
 -> Scale out the pod
 
 -> Introduce a service/redeploy
