@@ -2,15 +2,17 @@
 
 -> Install minikube
 
+-> Overview of dashboard
+
 -> Install/create a manifest for a published container
 
 -> Port forward & View Endpoints
 
--> Node port-forward the port
-
 -> Scale out the pod
 
--> Introduce a service
+-> Introduce a service/redeploy
 
--> Port-forward the service
+-> Node-port and port-forward the service
+
+-> Round robin visit all instances
 
