@@ -47,8 +47,39 @@ Conveniently, minikube already comes with integrated support for this dashboard,
 
 ![minikube dashboard](k8s-dashboard.png)
 
+The dashboard is a useful UI for your cluster and can allow you to easily make changes, view logs and manage cluster resources.
+
 ### Install/create a manifest for a published container
 
+In this tutorial we are going to use [this docker image](https://hub.docker.com/repository/docker/fpjack/sample-app)
+
+We will use `kubectl` to apply a YAML spec to our running cluster. These YAML specs define what we want to create
+
+We need to ensure we are pointing at the correct cluster that we want to make changes to, running `kubectl config current-context` should return `minikube`
+
+If this is not the case then run `kubectl config use-context minikube` to switch
+
+
+Below I have put together a spec that defines a simple pod with the above image in it.
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: static-pod
+  labels:
+    role: myrole
+spec:
+  containers:
+    - name: server
+      image: fpjack/sample-app
+      ports:
+        - name: web
+          containerPort: 8080
+          protocol: TCP
+```
+
+To apply a YAML spec to our cluster we can use `kubectl apply -f <path/to/yaml/file>`.
 ### Port forward & View Endpoints
 
 ### View debug/output in K8 dash
