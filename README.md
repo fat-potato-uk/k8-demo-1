@@ -66,7 +66,7 @@ Below I have put together a spec that defines a simple pod with the above image 
 apiVersion: v1
 kind: Pod
 metadata:
-  name: static-pod
+  name: single-pod
   labels:
     role: myrole
 spec:
@@ -79,7 +79,16 @@ spec:
           protocol: TCP
 ```
 
-To apply a YAML spec to our cluster we can use `kubectl apply -f <path/to/yaml/file>`.
+To apply a YAML spec to our cluster we can use `kubectl apply -f <path/to/yaml/file>`, or in this example
+
+```shell
+kubectl apply -f resources/single-pod.yaml
+```
+
+This should give you a log to say the pod was created and navigating to the dashboard should confirm this
+
+![Created pod](single-pod-created.png)
+
 ### Port forward & View Endpoints
 
 ### View debug/output in K8 dash
