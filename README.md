@@ -17,7 +17,7 @@ We can then switch to this cluster using the Docker desktop icon in the tool bar
 
 #### Kubectl
 
-We will use kubectl to interact with out cluster, to install it run the following
+We will use kubectl to interact with our cluster, to install it run the following
 
 ```shell
 brew install kubectl 
@@ -143,16 +143,22 @@ Now our dashboard should look something like this,
 
 This shows us a deployment which contains a set of replicas. 
 
-An interesting thing to look at now is if we delete one of our new pods, what will happen?
+An interesting thing to look at now is what happens if one of our pods is destroyed or deleted. 
+
+Try request `localhost:8080/crash` to one of the pods using the same port forwarding as above.
+
+And also try deleting the pod as well
 
 <details open>
 <summary>Answer</summary>
-Our Pod gets recreated. We told our replica set that we wanted 2 
+When the container in the pod crashes then the container is automatically restarted to bring it back to life, you can see this as the pods status switches between `Running` to `Error` and then back to `Running`
+
+When we delete the pod then the deployment will automatically spin up another pod with our sample-app, this is because in our replica set we told k8s that we wanted 2 of these pods.
 </details>
 
-We can still interact with our pods like before by port forwarding with the pod name, however there is a better way using services.
-
 ### Introduce a service/redeploy
+
+The issue we have now if how do we expose our application. We have multiple instances of our server running in different pods.
 
 Services will allow us to expose our application in a more robust way. Services can handle all of the network troubles and 
 
