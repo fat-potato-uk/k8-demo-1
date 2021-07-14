@@ -9,6 +9,7 @@ Docker desktop includes the ability to run a local kubernetes cluster.
 The easiest way of doing this is to go to `Docker desktop -> Preferences (the little cog in top right) -> Kubernetes -> Select Enable Kubernetes`
 
 ![docker desktop k8s](docker-desktop-k8s.png)
+*Note this will take a few minutes depending on your connection*
 
 We can then switch to this cluster using the Docker desktop icon in the tool bar at the top
 
@@ -44,11 +45,6 @@ In this tutorial we are going to use [this docker image](https://hub.docker.com/
 
 We will use `kubectl` to apply a YAML spec to our running cluster. These YAML specs define what we want to create
 
-We need to ensure we are pointing at the correct cluster that we want to make changes to, running `kubectl config current-context` should return `minikube`
-
-If this is not the case then run `kubectl config use-context minikube` to switch
-
-
 Below I have put together a spec that defines a simple pod with the above image in it.
 
 ```yaml
@@ -80,11 +76,85 @@ This should give you a log to say the pod was created and navigating to the dash
 
 ### Port forward & View Endpoints
 
-### View debug/output in K8 dash
+At this point our pod is running, however we have no way to access this. What we can do is forward a local port to a pod.
+
+Port forwarding is done as follows
+```shell
+kubectl port-forward <POD-NAME> <LOCAL-PORT>:<POD-PORT>
+```
+
+Try and put together the arguments for this command using `single-pod.yaml` we just used.
+
+You will know this is correct as you should be able to navigate to `localhost:<chosen port>/` and see the result.
+
+<details open>
+<summary>Answer</summary>
+<code>kubectl port-forward single-pod 8080:8080</code>
+</details>
+
+
+### View debug/output in K8s dash
+
+We can also view the output and logs of the Pod on the dashboard. To do this, navigate to the pod and select the logs button
+
+![](dashboard-logs-button.png) ![](dashboard-logs.png)
+
+From here you can view all the output from all the containers running in the pod. If you had multiple containers in a pod you could be able to select them using the drop down next to the container name.
 
 ### Scale out the pod
 
+If we now want to scale out our Pod we wont be able to with just a Pod. We will need to set up a deployment so that our pod replicas have something to manage them.
+
+Similar to above this is managed with a Yaml spec, so we can first delete our pod we created earlier `kubectl delete pod single-pod`
+
+We now want to apply this YAML, this will setup a deployment, that will have 2 replicas of our sample-app
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: multi-pod-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: sample-app
+  template:
+    metadata:
+      labels:
+        app: sample-app
+    spec:
+      containers:
+        - name: server
+          image: fpjack/sample-app
+          ports:
+            - name: web
+              containerPort: 8080
+              protocol: TCP
+```
+
+```shell
+kubectl apply -f resources/multi-pod-deployment.yaml 
+```
+
+Now our dashboard should look something like this, 
+
+![multi pod deployment](multi-pod-dashboard.png)
+
+This shows us a deployment which contains a set of replicas. 
+
+An interesting thing to look at now is if we delete one of our new pods, what will happen?
+
+<details open>
+<summary>Answer</summary>
+Our Pod gets recreated. We told our replica set that we wanted 2 
+</details>
+
+We can still interact with our pods like before by port forwarding with the pod name, however there is a better way using services.
+
 ### Introduce a service/redeploy
+
+Services will allow us to expose our application in a more robust way. Services can handle all of the network troubles and 
 
 ### Node-port and port-forward the service
 
