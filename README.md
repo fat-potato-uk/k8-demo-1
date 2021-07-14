@@ -1,40 +1,26 @@
 # k8-demo-1
 
-### Install minikube
+### Install a local cluster
 
-Minikube is what we will use to run Kubernetes locally. Therefore, the first step we need to do is to install minikube
+#### Docker desktop
 
-To install the latest minikube on macOS run the following
+Docker desktop includes the ability to run a local kubernetes cluster.
+
+The easiest way of doing this is to go to `Docker desktop -> Preferences (the little cog in top right) -> Kubernetes -> Select Enable Kubernetes`
+
+![docker desktop k8s](docker-desktop-k8s.png)
+
+We can then switch to this cluster using the Docker desktop icon in the tool bar at the top
+
+![docker desktop toolbar](docker-desktop-switch-context.png)
+
+#### Kubectl
+
+We will use kubectl to interact with out cluster, to install it run the following
 
 ```shell
-curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-darwin-amd64
-sudo install minikube-darwin-amd64 /usr/local/bin/minikube
+brew install kubectl 
 ```
-
-Once we have minikube installed we can run `minikube start` to start our local cluster, the following is what we expect to see
-
-
-```console
-➜  k8-demo-1 git:(main) ✗ minikube start
-😄  minikube v1.22.0 on Darwin 11.4
-✨  Using the docker driver based on user configuration
-👍  Starting control plane node minikube in cluster minikube
-🚜  Pulling base image ...
-💾  Downloading Kubernetes v1.21.2 preload ...
-    > preloaded-images-k8s-v11-v1...: 502.14 MiB / 502.14 MiB  100.00% 1.76 MiB
-    > gcr.io/k8s-minikube/kicbase...: 361.09 MiB / 361.09 MiB  100.00% 1.24 MiB
-🔥  Creating docker container (CPUs=2, Memory=8100MB) ...
-🐳  Preparing Kubernetes v1.21.2 on Docker 20.10.7 ...
-    ▪ Generating certificates and keys ...
-    ▪ Booting up control plane ...
-    ▪ Configuring RBAC rules ...
-🔎  Verifying Kubernetes components...
-    ▪ Using image gcr.io/k8s-minikube/storage-provisioner:v5
-🌟  Enabled addons: storage-provisioner, default-storageclass
-🏄  Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
-```
-
-If this is not the case then more information for installing minikube on alternative systems can be found here [minikube start](https://minikube.sigs.k8s.io/docs/start/)
 
 ### Overview of dashboard
 
@@ -42,8 +28,11 @@ To monitor the cluster we can use a dashboard, the [Kubernetes Dashboard](https:
 
 The dashboard makes it easy and simple to monitor and troubleshoot applications running in the cluster.
 
-Conveniently, minikube already comes with integrated support for this dashboard, to start the dashboard run `minikube dashboard`
+Included in this tutorial is a script to get you up and running with the dashboard
 
+```shell
+./resources/start-dashboard.sh
+```
 
 ![minikube dashboard](k8s-dashboard.png)
 
