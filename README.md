@@ -160,9 +160,58 @@ When we delete the pod then the deployment will automatically spin up another po
 
 The issue we have now if how do we expose our application. We have multiple instances of our server running in different pods.
 
-Services will allow us to expose our application in a more robust way. Services can handle all of the network troubles and 
+A service is going to handle all of this basic networking. It is going to allow communication inside our cluster aswell as a way of targeting our pods externally. 
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: sample-app-service
+spec:
+  selector:
+    app: sample-app
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+```
+
+```shell
+kubectl apply -f resources/service.yaml
+```
+
+This service essentially says we want to target any pods with the `app=sample-app` label
+
+Our service is given a cluster IP and a DNS record, this is useful as we can now allow apps in our cluster to talk to one another. Previously we couldn't do this with our pods as they could easily be destroyed and recreated and assigned a different IP.
+
 
 ### Node-port and port-forward the service
+
+Node porting our service is what is going to allow us to access the service externally. Therefore we need to change the type of service from `ClusterIP` to `NodePort`
+
+We can do this by modifying our `service.yaml` as is shown below with the new `type` and reapplying it using the same `kubectl` command as before.
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: sample-app-service
+spec:
+  type: NodePort
+  selector:
+    app: sample-app
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+```
+
+We will now be able to see on the dashboard that our service is of type `NodePort`, we can use a `kubectl get` to find out what port we can access the service on now
+
+```shell
+kubectl get service sample-app-service --output='jsonpath="{.spec.ports[0].nodePort}"'
+```
+
 
 ### Round robin visit all instances
 
