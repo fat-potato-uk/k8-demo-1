@@ -215,3 +215,26 @@ kubectl get service sample-app-service --output='jsonpath="{.spec.ports[0].nodeP
 
 ### Round robin visit all instances
 
+Something really important when working with multiple instances of the same app behind a service is state. The sample-app can be sent a POST request to `/message` to set an in memory message that is then returned with a GET to `/message`
+
+Try sending this POST request to our app once on our port we retrieved earlier
+
+```shell
+curl -X POST -H "Content-Type: application/json" -d '{"message": "our new message"}' http://localhost:<YOUR PORT>/message
+```
+
+Then get the message a few times, what happens?
+
+```shell
+curl -X GET http://localhost:<YOUR PORT>/message
+```
+
+<details open>
+<summary>Answer</summary>
+The message should change between an initial message and the one you set in your POST request. This is because as your request is hitting the service it is routing between all of Pods that match the selector in the service. I.e the `app=sample-app` label
+
+Therefore, care should be taken as to ensure our applications can handle state with this. 
+</details>
+
+
+
