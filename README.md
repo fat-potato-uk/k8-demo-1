@@ -9,6 +9,7 @@ Docker desktop includes the ability to run a local kubernetes cluster.
 The easiest way of doing this is to go to `Docker desktop -> Preferences (the little cog in top right) -> Kubernetes -> Select Enable Kubernetes`
 
 ![docker desktop k8s](docker-desktop-k8s.png)
+
 *Note this will take a few minutes depending on your connection*
 
 We can then switch to this cluster using the Docker desktop icon in the tool bar at the top
@@ -22,6 +23,24 @@ We will use kubectl to interact with our cluster, to install it run the followin
 ```shell
 brew install kubectl 
 ```
+
+<details>
+<summary>If you cannot use brew</summary>
+
+If you cannot use brew for what ever reason we can instead download the binary and place it somewhere our PATH var can see
+
+First download the `kubectl` binary and make it executable
+
+```shell
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/darwin/amd64/kubectl"
+chmod +x kubectl
+```
+
+You can now run `./kubectl` to access it, if you have access to anywhere on your path then you can move this binary there and just run `kubectl`
+
+</details>
+
+
 
 ### Overview of dashboard
 
