@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: multi-pod-deployment
+  name: sample-app-deployment
 spec:
   replicas: 2
   selector:

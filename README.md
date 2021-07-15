@@ -27,7 +27,7 @@ brew install kubectl
 <details>
 <summary>If you cannot use brew</summary>
 
-If you cannot use brew for what ever reason we can instead download the binary and place it somewhere our PATH var can see
+If you cannot use brew for what ever reason we can instead download the binary and use that.
 
 First download the `kubectl` binary and make it executable
 
@@ -62,9 +62,9 @@ The dashboard is a useful UI for your cluster and can allow you to easily make c
 
 In this tutorial we are going to use [this docker image](https://hub.docker.com/repository/docker/fpjack/sample-app)
 
-We will use `kubectl` to apply a YAML spec to our running cluster. These YAML specs define what we want to create
+We will use `kubectl` to apply YAML file that defines our resource to our running cluster. These YAML files define what we want to create
 
-Below I have put together a spec that defines a simple pod with the above image in it.
+Below I have put together some YAML that defines a simple pod with the above image in it.
 
 ```yaml
 apiVersion: v1
@@ -83,7 +83,7 @@ spec:
           protocol: TCP
 ```
 
-To apply a YAML spec to our cluster we can use `kubectl apply -f <path/to/yaml/file>`, or in this example
+To apply this to our cluster we can use `kubectl apply -f <path/to/yaml/file>`, or in this example
 
 ```shell
 kubectl apply -f resources/single-pod.yaml
@@ -104,7 +104,7 @@ kubectl port-forward <POD-NAME> <LOCAL-PORT>:<POD-PORT>
 
 Try and put together the arguments for this command using `single-pod.yaml` we just used.
 
-You will know this is correct as you should be able to navigate to `localhost:<chosen port>/` and see the result.
+You will know this is correct as you should be able to navigate to `localhost:<chosen port>/` and see a simple `Hello world`
 
 <details>
 <summary>Answer</summary>
@@ -124,7 +124,7 @@ From here you can view all the output from all the containers running in the pod
 
 If we now want to scale out our Pod we wont be able to with just a Pod. We will need to set up a deployment so that our pod replicas have something to manage them.
 
-Similar to above this is managed with a Yaml spec, so we can first delete our pod we created earlier `kubectl delete pod single-pod`
+Similar to above this is managed with a Yaml file to create our resource, so we can first delete our pod we created earlier `kubectl delete pod single-pod`
 
 We now want to apply this YAML, this will setup a deployment, that will have 2 replicas of our sample-app
 
@@ -132,7 +132,7 @@ We now want to apply this YAML, this will setup a deployment, that will have 2 r
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: multi-pod-deployment
+  name: sample-app-deployment
 spec:
   replicas: 2
   selector:
@@ -153,12 +153,12 @@ spec:
 ```
 
 ```shell
-kubectl apply -f resources/multi-pod-deployment.yaml 
+kubectl apply -f resources/sample-app-deployment.yaml 
 ```
 
 Now our dashboard should look something like this, 
 
-![multi pod deployment](multi-pod-dashboard.png)
+![multi pod deployment](sample-app-deployment.png)
 
 This shows us a deployment which contains a set of replicas. 
 
@@ -177,9 +177,9 @@ When we delete the pod then the deployment will automatically spin up another po
 
 ### Introduce a service/redeploy
 
-The issue we have now if how do we expose our application. We have multiple instances of our server running in different pods.
+The issue we have now is how do we expose our application. We have multiple instances of our server running in different pods.
 
-A service is going to handle all of this basic networking. It is going to allow communication inside our cluster aswell as a way of targeting our pods externally. 
+A service is going to handle all of this basic networking. It is going to allow communication inside our cluster as well as a way of targeting our pods externally depending on what type of service we create.
 
 ```yaml
 apiVersion: v1
@@ -206,7 +206,7 @@ Our service is given a cluster IP and a DNS record, this is useful as we can now
 
 ### Node-port and port-forward the service
 
-Node porting our service is what is going to allow us to access the service externally. Therefore we need to change the type of service from `ClusterIP` to `NodePort`
+Node porting our service is what is going to allow us to access the service externally. Therefore, we need to change the type of service from `ClusterIP` to `NodePort`
 
 We can do this by modifying our `service.yaml` as is shown below with the new `type` and reapplying it using the same `kubectl` command as before.
 
