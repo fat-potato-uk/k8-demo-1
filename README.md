@@ -16,6 +16,45 @@ We can then switch to this cluster using the Docker desktop icon in the tool bar
 
 ![docker desktop toolbar](docker-desktop-switch-context.png)
 
+
+<details>
+<summary><i> minikube alternative</i></summary>
+If Docker desktop is not an option, we can also use something called <code>minikube</code>
+
+To install the latest minikube on macOS run the following
+
+```shell
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-darwin-amd64
+sudo install minikube-darwin-amd64 /usr/local/bin/minikube
+```
+
+Once we have minikube installed we can run `minikube start` to start our local cluster, the following is what we expect to see
+
+```console
+➜  k8-demo-1 git:(main) ✗ minikube start
+😄  minikube v1.22.0 on Darwin 11.4
+✨  Using the docker driver based on user configuration
+👍  Starting control plane node minikube in cluster minikube
+🚜  Pulling base image ...
+💾  Downloading Kubernetes v1.21.2 preload ...
+    > preloaded-images-k8s-v11-v1...: 502.14 MiB / 502.14 MiB  100.00% 1.76 MiB
+    > gcr.io/k8s-minikube/kicbase...: 361.09 MiB / 361.09 MiB  100.00% 1.24 MiB
+🔥  Creating docker container (CPUs=2, Memory=8100MB) ...
+🐳  Preparing Kubernetes v1.21.2 on Docker 20.10.7 ...
+    ▪ Generating certificates and keys ...
+    ▪ Booting up control plane ...
+    ▪ Configuring RBAC rules ...
+🔎  Verifying Kubernetes components...
+    ▪ Using image gcr.io/k8s-minikube/storage-provisioner:v5
+🌟  Enabled addons: storage-provisioner, default-storageclass
+🏄  Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
+```
+
+##### If you are using minikube, disregard the later section to install the dashboard. minikube has support to install the dashboard using `minikube dashboard`
+
+</details>
+
+
 #### Kubectl
 
 We will use kubectl to interact with our cluster, to install it run the following
@@ -40,6 +79,16 @@ You can now run `./kubectl` to access it, if you have access to anywhere on your
 
 </details>
 
+#### Default namespace
+
+By default, we will be in namespace `default` however we can create a new namespace and use this new namespace as out default.
+
+With `kubectl` we can create and set a new default namespace with the following
+
+```shell
+kubectl create namespace <YOUR NAMESPACE>
+kubectl config set-context --current --namespace=<YOUR NAMESPACE>
+```
 
 
 ### Overview of dashboard
