@@ -87,7 +87,7 @@ Try and put together the arguments for this command using `single-pod.yaml` we j
 
 You will know this is correct as you should be able to navigate to `localhost:<chosen port>/` and see the result.
 
-<details open>
+<details>
 <summary>Answer</summary>
 <code>kubectl port-forward single-pod 8080:8080</code>
 </details>
@@ -149,7 +149,7 @@ Try request `localhost:8080/crash` to one of the pods using the same port forwar
 
 And also try deleting the pod as well
 
-<details open>
+<details>
 <summary>Answer</summary>
 When the container in the pod crashes then the container is automatically restarted to bring it back to life, you can see this as the pods status switches between `Running` to `Error` and then back to `Running`
 
@@ -229,7 +229,7 @@ Then get the message a few times, what happens?
 curl -X GET http://localhost:<YOUR PORT>/message
 ```
 
-<details open>
+<details>
 <summary>Answer</summary>
 The message should change between an initial message and the one you set in your POST request. This is because as your request is hitting the service it is routing between all of Pods that match the selector in the service. I.e the `app=sample-app` label
 
