@@ -109,7 +109,7 @@ The dashboard is a useful UI for your cluster and can allow you to easily make c
 
 ### Install/create a manifest for a published container
 
-In this tutorial we are going to use [this docker image](https://hub.docker.com/repository/docker/fpjack/sample-app)
+In this tutorial we are going to use [this docker image](https://hub.docker.com/r/fpjack/sample-app)
 
 We will use `kubectl` to apply YAML file that defines our resource to our running cluster. These YAML files define what we want to create
 
