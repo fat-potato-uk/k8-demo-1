@@ -2,26 +2,13 @@
 
 ### Install a local cluster
 
-#### Docker desktop
-
-Docker desktop includes the ability to run a local kubernetes cluster.
-
-The easiest way of doing this is to go to `Docker desktop -> Preferences (the little cog in top right) -> Kubernetes -> Select Enable Kubernetes`
-
-![docker desktop k8s](docker-desktop-k8s.png)
-
-*Note this will take a few minutes depending on your connection*
-
-We can then switch to this cluster using the Docker desktop icon in the tool bar at the top
-
-![docker desktop toolbar](docker-desktop-switch-context.png)
-
-
-<details>
-<summary><i> minikube alternative</i></summary>
 If Docker desktop is not an option, we can also use something called <code>minikube</code>
 
-To install the latest minikube on macOS run the following
+To install the latest minikube on macOS run either of the following
+
+```shell
+brew install minikube
+```
 
 ```shell
 curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-darwin-amd64
@@ -52,8 +39,22 @@ Once we have minikube installed we can run `minikube start` to start our local c
 
 ##### If you are using minikube, disregard the later section to install the dashboard. minikube has support to install the dashboard using `minikube dashboard`
 
-</details>
+<details>
+<summary><i> Docker Desktop alternative</i></summary>
 
+Docker desktop includes the ability to run a local kubernetes cluster.
+
+The easiest way of doing this is to go to `Docker desktop -> Preferences (the little cog in top right) -> Kubernetes -> Select Enable Kubernetes`
+
+![docker desktop k8s](docker-desktop-k8s.png)
+
+*Note this will take a few minutes depending on your connection*
+
+We can then switch to this cluster using the Docker desktop icon in the tool bar at the top
+
+![docker desktop toolbar](docker-desktop-switch-context.png)
+
+</details>
 
 #### Kubectl
 
@@ -96,6 +97,8 @@ kubectl config set-context --current --namespace=<YOUR NAMESPACE>
 To monitor the cluster we can use a dashboard, the [Kubernetes Dashboard](https://github.com/kubernetes/dashboard) is a simple web-based UI for kubernetes.
 
 The dashboard makes it easy and simple to monitor and troubleshoot applications running in the cluster.
+
+Note: If you use this method instead of ```minikube dashboard```, you will have to authenticate for full access.
 
 Included in this tutorial is a script to get you up and running with the dashboard
 
@@ -205,13 +208,13 @@ spec:
 kubectl apply -f resources/sample-app-deployment.yaml 
 ```
 
-Now our dashboard should look something like this, 
+Now our dashboard should look something like this,
 
 ![multi pod deployment](sample-app-deployment.png)
 
-This shows us a deployment which contains a set of replicas. 
+This shows us a deployment which contains a set of replicas.
 
-An interesting thing to look at now is what happens if one of our pods is destroyed or deleted. 
+An interesting thing to look at now is what happens if one of our pods is destroyed or deleted.
 
 Try request `localhost:8080/crash` to one of the pods using the same port forwarding as above.
 
@@ -280,6 +283,11 @@ We will now be able to see on the dashboard that our service is of type `NodePor
 kubectl get service sample-app-service --output='jsonpath="{.spec.ports[0].nodePort}"'
 ```
 
+You also need to forward the port for the service. This differs slightly from forwarding a pod, as you can see below.
+
+```shell
+kubectl port-forward svc/<SERVICE-NAME> <SERVICE-PORT>:<NODE-PORT>
+```
 
 ### Round robin visit all instances
 
@@ -301,8 +309,5 @@ curl -X GET http://localhost:<YOUR PORT>/message
 <summary>Answer</summary>
 The message should change between an initial message and the one you set in your POST request. This is because as your request is hitting the service it is routing between all of Pods that match the selector in the service. I.e the `app=sample-app` label
 
-Therefore, care should be taken as to ensure our applications can handle state with this. 
+Therefore, care should be taken as to ensure our applications can handle state with this.
 </details>
-
-
-
