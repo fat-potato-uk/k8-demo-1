@@ -2,8 +2,6 @@
 
 ### Install a local cluster
 
-If Docker desktop is not an option, we can also use something called <code>minikube</code>
-
 To install the latest minikube on macOS run either of the following
 
 ```shell
@@ -41,7 +39,7 @@ Once we have minikube installed we can run `minikube start` to start our local c
 
 <details>
 <summary><i> Docker Desktop alternative</i></summary>
-
+If minikube is not preferred, Docker desktop is an alternative option.
 Docker desktop includes the ability to run a local kubernetes cluster.
 
 The easiest way of doing this is to go to `Docker desktop -> Preferences (the little cog in top right) -> Kubernetes -> Select Enable Kubernetes`
